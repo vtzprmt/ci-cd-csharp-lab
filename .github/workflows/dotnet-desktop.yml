@@ -8,15 +8,19 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest # Меняем Ubuntu на Windows, чтобы работал .NET Framework 4.7.2
 
     steps:
     - uses: actions/checkout@v3
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '8.0.x'
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.1 # Специальный экшен для старых проектов .NET
 
-    - name: Build Project
-      run: dotnet build CalculatorApp.csproj
+    - name: Navigate to Workspace
+      run: cd $GITHUB_WORKSPACE
+
+    - name: Restore Packages
+      run: nuget restore CalculatorApp.sln # Восстанавливаем старые пакеты через NuGet
+
+    - name: Build Solution
+      run: msbuild CalculatorApp.sln /p:Configuration=Release # Собираем через MSBuild
