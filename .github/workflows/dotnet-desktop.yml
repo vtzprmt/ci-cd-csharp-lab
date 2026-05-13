@@ -8,19 +8,19 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest # Меняем Ubuntu на Windows, чтобы работал .NET Framework 4.7.2
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v3
 
     - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v1.1 # Специальный экшен для старых проектов .NET
+      uses: microsoft/setup-msbuild@v1.1
 
     - name: Navigate to Workspace
       run: cd $GITHUB_WORKSPACE
 
     - name: Restore Packages
-      run: nuget restore CalculatorApp.sln # Восстанавливаем старые пакеты через NuGet
+      run: nuget restore CalculatorApp.csproj
 
-    - name: Build Solution
-      run: msbuild CalculatorApp.sln /p:Configuration=Release # Собираем через MSBuild
+    - name: Build Project
+      run: msbuild CalculatorApp.csproj /p:Configuration=Release
